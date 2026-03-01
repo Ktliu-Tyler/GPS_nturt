@@ -1,0 +1,38 @@
+[Unit]
+Description=GPS to CAN Real-time Sender Service
+Documentation=https://github.com/NTURT/gps-can-sender
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/pi/Desktop/RPI_Desktop/GPS
+
+# 環境變數配置
+Environment="GPS_PORT=/dev/ttyUSB0"
+Environment="GPS_BAUD=115200"
+Environment="CAN_INTERFACE=can1"
+Environment="CAN_BITRATE=500000"
+
+# 啟動指令
+ExecStart=/home/pi/Desktop/RPI_Desktop/GPS/start_gps.sh
+
+# 重啟策略
+Restart=on-failure
+RestartSec=5s
+
+# 超時設定
+TimeoutStartSec=30
+TimeoutStopSec=10
+
+# 日誌設定
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=gps-can-service
+
+# 保護系統
+NoNewPrivileges=false
+
+[Install]
+WantedBy=multi-user.target
